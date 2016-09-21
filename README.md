@@ -5,6 +5,7 @@
 - [Littéraux binaires](#binary_literals)
 - [Séparateur de chiffres](#digit_separators)
 - [deprecated](#deprecated)
+- [Lambdas génériques](#generic_lambdas)
 
 ---
 
@@ -58,3 +59,13 @@ void bar() {}
 ```
 
 Il permet de générer à la compilation un avertissement lorsque ces fonctionnalités sont utilisées dans le code.
+
+---
+
+#### Lambdas génériques <a id="generic_lambdas"></a>
+
+En C++11, les paramètres des fonctions lambdas devaient tous êtres spécifiés explicitement avec des types concrets. Désormais, il est possible d'utiliser l'inférence de type avec `auto`.
+
+```cpp
+auto lambda = [](auto a, auto b) { return a + b; }
+```
