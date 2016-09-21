@@ -1,9 +1,10 @@
-# Cxx-14
+# C++14
 ### Nouveautés et fonctionnalités
 
 - [make_unique](#make_unique)
 - [Littéraux binaires](#binary_literals)
 - [Séparateur de chiffres](#digit_separators)
+- [deprecated](#deprecated)
 
 ---
 
@@ -41,3 +42,19 @@ const int billion = 1'000'000'000;
 const double pi   = 3.141'592'653'59;
 const int n       = 0b0101'0111'1010;
 ```
+
+---
+
+#### deprecated <a id="deprecated"></a>
+
+Il existe un nouvel attribut `[[deprecated]]` permettant de déprécier des fonctionnalités. Il est possible d'y associer ou non un message.
+
+```cpp
+[[deprecated]]
+void foo() {}
+
+[[deprecated("Cette fonction est dépréciée")]]
+void bar() {}
+```
+
+Il permet de générer à la compilation un avertissement lorsque ces fonctionnalités sont utilisées dans le code.
