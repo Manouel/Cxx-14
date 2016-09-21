@@ -3,6 +3,7 @@
 
 - [make_unique](#make_unique)
 - [Littéraux binaires](#binary_literals)
+- [Séparateur de chiffres](#digit_separators)
 
 ---
 
@@ -11,7 +12,7 @@
 Tout comme les `shared_ptr`, les `unqiue_ptr` possèdent désormais également leur fonction de création `make_unique` qui permet d'éviter des fuites mémoires dans certains cas.
 
 ```cpp
-std::shared_ptr<int> ptr = std::make_unique<int>(42);
+std::unique_ptr<int> ptr = std::make_unique<int>(42);
 ```
 
 ---
@@ -27,4 +28,16 @@ int b = 0xC3A;    // Hexadécimal
 int n = 0b11;     // Binaire
 
 std::cout << n << std::endl;    // Affiche 3
+```
+
+---
+
+#### Séparateur de chiffres <a id="digit_separators"></a>
+
+Pour faciliter la lecture des nombres, il est maintenant possible d'utiliser des apostrophes pour séparer les chiffres. Celles-ci peuvent être placées n'importe où sur des entiers ou des nombres à virgule de n'importe quelle base.
+
+```cpp
+const int billion = 1'000'000'000;
+const double pi   = 3.141'592'653'59;
+const int n       = 0b0101'0111'1010;
 ```
