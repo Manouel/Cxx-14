@@ -7,6 +7,7 @@
 - [deprecated](#deprecated)
 - [Lambdas génériques](#generic_lambdas)
 - [Déduction des types de retour](#return_type_deduction)
+- [Capture étendue dans les lambdas](#lambda_capture)
 
 ---
 
@@ -111,4 +112,53 @@ auto bar(int i)
   else
     return i;
 }
+```
+
+---
+
+#### Capture étendue dans les lambdas <a id="lambda_capture"></a>
+
+Les fonctions lambdas introduites en C++11 permettent de capturer des variables, par copie ou référence.
+
+```cpp
+int a = 1;
+
+// Capture par copie
+auto lambda = [a](int b) { return a + b; };
+
+// Capture par référence
+auto l2 = [&a](int n) {
+    if (n > a)
+        a = n;
+};
+
+a = 2;
+std::cout << lambda(3) << std::endl;    // Affiche 4
+```
+
+A noter que ici, la valeur est capturée lors de la création de la lambda et ne change pas ensuite.
+
+Ici, il n'est donc pas possible de passer directement une valeur dans la capture, il faut au préalable créer une variable. De plus, il n'est pas possible non plus d'utiliser la sémantique de mouvement, et donc de passer des objets non copiables comme `unique_ptr`.
+
+En C++14, les variables capturées n'ont pas besoin d'être créées avant, et leur type est déduit par le compilateur.
+
+```cpp
+auto lambda = [a = 1](int b) { return a + b; };
+
+
+// Création d'un weak_ptr directement dans la lambda
+std::shared_ptr<int> sr = std::make_shared<int>(3);
+auto l2 = [wr = std::weak_ptr<int>(sr)]() { foo(wr); };
+
+
+auto timer = [val = system_clock::now()] { return system_clock::now() - val; };
+timer();   // Temps depuis la création du timer
+```
+
+Il est donc maintenant possible de passer des variables par déplacement.
+
+```cpp
+auto p = std::make_unique<int>(10);
+
+auto lambda = [p = std::move(p)] { return *p; }
 ```
