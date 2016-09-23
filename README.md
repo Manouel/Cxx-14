@@ -6,6 +6,7 @@
 - [Séparateur de chiffres](#digit_separators)
 - [deprecated](#deprecated)
 - [Lambdas génériques](#generic_lambdas)
+- [Déduction des types de retour](#return_type_deduction)
 
 ---
 
@@ -68,4 +69,46 @@ En C++11, les paramètres des fonctions lambdas devaient tous êtres spécifiés
 
 ```cpp
 auto lambda = [](auto a, auto b) { return a + b; }
+```
+
+---
+
+#### Déduction des types de retour <a id="return_type_deduction"></a>
+
+En C++11, la déduction du type de retour d'une fonction n'était autorisée que sur les lambdas. Pour les autres fonctions, il fallait compléter le retour `auto` par une spécification de type comme dans les exemples suivants.
+
+```cpp
+auto f() -> int {}                // int
+auto g() -> decltype(1) {}        // int
+auto h() -> decltype(foo()) {}    // type de retour de foo()
+```
+
+Désormais, il est possible d'utiliser la déduction de type de retour sur toutes les fonctions en utilisant uniquement `auto`. 
+
+```cpp
+auto square(int n) 
+{
+    return n * n;
+}
+```
+
+Cependant, si plusieurs expressions de retour sont utilisées dans la fonction, ils doivent tous être du même type. De plus, comme la déduction se fait à partir de ou des expressions de retour, la fonction ne peut pas être utilisée avant d'avoir été définie. Sa signature ne suffit pas au compilateur lors de l'utilisation, et la définition doit être disponible.
+De plus, dans le cas des fonctions récursives, l'appel récursif doit se trouver après au moins un retour dans le corps de la fonction, auquel cas la déduction provoquera une erreur.
+
+```cpp
+auto foo(int i)
+{
+  if (i == 1)
+    return i;
+  else
+    return foo(i-1) + i;    // Ok, déduction de type int faite au dessus
+}
+
+auto bar(int i)
+{
+  if (i != 1)
+    return bar(i-1) + i;    // Erreur, déduction impossible
+  else
+    return i;
+}
 ```
