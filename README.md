@@ -8,6 +8,7 @@
 - [Lambdas génériques](#generic_lambdas)
 - [Déduction des types de retour](#return_type_deduction)
 - [Capture étendue dans les lambdas](#lambda_capture)
+- [Accès aux tuples par type](#tuple_addressing)
 
 ---
 
@@ -161,4 +162,21 @@ Il est donc maintenant possible de passer des variables par déplacement.
 auto p = std::make_unique<int>(10);
 
 auto lambda = [p = std::move(p)] { return *p; }
+```
+
+---
+
+#### Accès aux tuples par type <a id="tuple_addressing"></a>
+
+En C++11, il est possible d'accéder aux éléments d'un tuple via leur index. C++14 introduit l'accès par type. S'il existe plus d'un élément du type demandé, cela provoque une erreur de compilation.
+
+```cpp
+std::tuple<std::string, std::string, int> t("foo", "bar", 7);
+
+// C++11
+std::cout << std::get<2>(t) << std::endl;          // 7
+// C++14
+std::cout << std::get<int>(t) << std::endl;        // 7
+
+std::cout << std::get<std::string>(t) << std::endl;  // Erreur de compilation : ambiguité
 ```
