@@ -7,6 +7,7 @@
 - [deprecated](#deprecated)
 - [Lambdas génériques](#generic_lambdas)
 - [Déduction des types de retour](#return_type_deduction)
+- [decltype(auto)](#decltype_auto)
 - [Capture étendue dans les lambdas](#lambda_capture)
 - [Accès aux tuples par type](#tuple_addressing)
 
@@ -112,6 +113,35 @@ auto bar(int i)
     return bar(i-1) + i;    // Erreur, déduction impossible
   else
     return i;
+}
+```
+
+---
+
+#### decltype(auto) <a id="decltype_auto"></a>
+
+La différence entre les fonctionnalités `auto` et `decltype` introduites en C++11 est que contrairement à `decltype`, `auto` ne conserve pas les qualificateurs de type comme `const`, `&` ou `&&`.
+C++14 introduit donc `decltype(auto)`, pouvant être utilisé dans les même conditions que `auto` tout en conservant les qualificateurs comme le fait `decltype`.
+
+```cpp
+int& foo();
+
+const int i { 1 };
+auto j = i;             // int
+decltype(i) k = i;      // const int
+decltype(auto) l = i;   // const int
+
+auto a = foo();             // int
+decltype(foo()) b = foo();  // int&
+decltype(auto) c = foo();   // int&
+```
+
+`decltype(auto)` est aussi utilisable avec la déduction de type de retour vue précédemment.
+
+```cpp
+decltype(auto) foo()
+{
+    // ...
 }
 ```
 
