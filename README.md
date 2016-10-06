@@ -10,6 +10,7 @@
 - [decltype(auto)](#decltype_auto)
 - [Capture étendue dans les lambdas](#lambda_capture)
 - [Accès aux tuples par type](#tuple_addressing)
+- [Assouplissement des fonctions constexpr](#relaxed_constexpr_functions)
 
 ---
 
@@ -210,3 +211,37 @@ std::cout << std::get<int>(t) << std::endl;        // 7
 
 std::cout << std::get<std::string>(t) << std::endl;  // Erreur de compilation : ambiguité
 ```
+
+---
+
+#### Assouplissement des fonctions constexpr <a id="relaxed_constexpr_functions"></a>
+
+Le C++11 avait introduit les [fonctions constexpr](https://github.com/Manouel/Cxx-11#constexpr), mais celles-ci étaient soumises à de nombreuses conditions. Le C++14 retire désormais plusieurs d'entre elles.
+
+Les fonctions `constexpr` peuvent maintenant contenir :
+
+  * Des déclarations de variables initialisées, excepté des variables `static` ou `thread_local`
+  * Des conditions `if` et `switch`
+  * Des boucles `while` et `for`
+  * Des modifications d'objets si ceux-ci ont été créés dans la fonction en question
+
+Il est donc désormais possible d'écrire des fonctions comme présenté dans cet exemple.
+
+```cpp
+constexpr int max(const std::initializer_list<int>& list)
+{
+    int max { 0 };
+    
+    for (auto i : list)
+    {
+        if (i > max)
+            max = i;
+    }
+
+    return max;
+}
+
+constexpr int n = max({ 5, 2, 10, 6 });
+```
+
+A noter qu'une fonction `constexpr` ne peut appeler que des fonctions `constexpr`.
